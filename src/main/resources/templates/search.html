@@ -1,0 +1,113 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="copy">
+    <title>Eniro - Basic company search</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta    content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no"
+            id="Viewport" name="viewport" />
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" media="screen"
+          href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" />
+
+</head>
+
+<body>
+
+<h1>Eniro - Basic company search</h1>
+
+
+<p>Please enter the key words (in comma-separated manner).
+    You can also introduce filter word which will by applied on each search result. </p>
+
+<form action="#" th:object="${searchCriteria}" method="POST"
+      th:action="@{/search}" class="form-horizontal">
+
+    <!-- key words -->
+    <div class="form-group">
+        <label for="commaSeparatedKeys" class="control-label col-xs-2">Key words</label>
+        <div class="col-xs-2">
+            <input type="text" class="form-control" id="commaSeparatedKeys"
+                   th:field="*{commaSeparatedKeys}" placeholder="Enter comma separated key words"
+                   style="width: 10em;"/>
+        </div>
+    </div>
+
+    <!-- key words errors -->
+    <div class="form-group">
+        <div class="control-label col-xs-2">&nbsp;</div>
+        <div class="col-xs-2">&nbsp;</div>
+        <div class="col-xs-8">
+				<span th:if="${#fields.hasErrors('commaSeparatedKeys')}"
+                      style="color: red; font-size: smaller" th:errors="*{commaSeparatedKeys}">Incorrect key words format</span>
+        </div>
+    </div>
+
+    <!-- filter -->
+    <div class="form-group">
+        <label for="filter" class="control-label col-xs-2">Filter</label>
+        <div class="col-xs-2">
+            <input type="text" class="form-control" id="filter"
+                   th:field="*{filter}" placeholder="Enter word to filter search result"
+                   style="width: 10em;"/>
+        </div>
+    </div>
+
+    <!--  Submit button -->
+    <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+
+</form>
+
+<div th:if="${history}">
+
+    <h2>Search history:</h2>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Key word</th>
+            <th>filter</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="h : ${history}">
+            <td th:text="${h.keyWord}" />
+            <td th:text="${h.filter}" />
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<div th:if="${results}">
+
+    <h2>Search results:</h2>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Result</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="result : ${results}">
+            <td th:text="${result}">Owner</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+</body>
+</html>
