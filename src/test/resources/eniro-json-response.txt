@@ -1,0 +1,48 @@
+{
+  "title": "Gula sidorna API",
+  "query": "http://api.eniro.com/cs/search/basic?country=se&search_word=advocat&version=1.1.3",
+  "totalHits": 1,
+  "totalCount": 1,
+  "startIndex": 1,
+  "itemsPerPage": 1,
+  "adverts": [
+    {
+      "eniroId": "5189867",
+      "companyInfo": {
+        "companyName": "advocat.se ADVOKATSKEPPET AB",
+        "orgNumber": "5565918652",
+        "companyText": null
+      },
+      "address": {
+        "streetName": "Pipersg. 3",
+        "postCode": "112 24",
+        "postArea": "STOCKHOLM",
+        "postBox": null
+      },
+      "location": {
+        "coordinates": [
+          {
+            "longitude": 18.0448856,
+            "latitude": 59.3291548
+          },
+          {
+            "use": "route",
+            "longitude": 18.0448856,
+            "latitude": 59.3291548
+          }
+        ]
+      },
+      "phoneNumbers": [
+        {
+          "type": "std",
+          "phoneNumber": "08 - 791 94 00",
+          "label": null
+        }
+      ],
+      "companyReviews": "http://www.rejta.se/omdome/845242/advocat",
+      "homepage": "http://api.eniro.com/proxy/homepage/uANwPf5aVK216MYKalW15pBRQRJFGHJwTDaaXfA31oxVTx_lZusZTXMo7lXbpY-NZQk2Z9UHEt8=",
+      "facebook": null,
+      "infoPageLink": "http://gulasidorna.eniro.se/f/advocatse-advokatskeppet-ab:5189867?search_word=advocat"
+    }
+  ]
+}

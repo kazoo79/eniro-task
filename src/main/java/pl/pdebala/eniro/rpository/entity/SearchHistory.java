@@ -59,4 +59,25 @@ public class SearchHistory {
                 ", filter='" + filter + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SearchHistory that = (SearchHistory) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (keyWord != null ? !keyWord.equals(that.keyWord) : that.keyWord != null) return false;
+        return filter != null ? filter.equals(that.filter) : that.filter == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (keyWord != null ? keyWord.hashCode() : 0);
+        result = 31 * result + (filter != null ? filter.hashCode() : 0);
+        return result;
+    }
 }
