@@ -6,7 +6,7 @@
     <groupId>pl.pdebala.eniro</groupId>
     <artifactId>eniro-task</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>eniro-task</name>
     <description>Eniro task - search API</description>
@@ -45,11 +45,15 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
+
+        <!--Set scope of spring-boot-starter-tomcat to provided if you want to run springBoot app-->
+        <!--like a war on standalone servlet container-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+        <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -75,14 +79,16 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.1</version>
-                <configuration>
-                    <path>/enirotest</path>
-                </configuration>
-            </plugin>
+            <!--Use this plugin when you wat to run springBoot app like war in a not embedded servlet container-->
+            <!--<plugin>-->
+            <!--<groupId>org.apache.tomcat.maven</groupId>-->
+            <!--<artifactId>tomcat7-maven-plugin</artifactId>-->
+            <!--<version>2.1</version>-->
+            <!--<configuration>-->
+            <!--<path>/enirotest</path>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+
         </plugins>
     </build>
 
