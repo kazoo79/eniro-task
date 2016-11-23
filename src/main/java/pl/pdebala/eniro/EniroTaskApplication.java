@@ -33,15 +33,17 @@ import java.util.concurrent.Executor;
  */
 @SpringBootApplication
 @EnableAsync
-public class EniroTaskApplication extends AsyncConfigurerSupport {
+public class EniroTaskApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EniroTaskApplication.class, args);
+        //SpringApplication.run(EniroTaskApplication.class, args);
+        new SpringApplicationBuilder().sources(EniroTaskApplication.class).run(args);
     }
 
     @Bean
     AsyncRestTemplate asyncRestTemplate() {
         return new AsyncRestTemplate();
     }
+
 
 }

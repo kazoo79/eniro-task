@@ -33,7 +33,7 @@ public class JsonConverterTest {
         JSON_CONTENT = Resources.toString(url, Charsets.UTF_8);
     }
 
-    @Test
+   //@Test
     public void shouldFindFilteredDataAndReturnJsonObject() {
         // given
         final String filterCompanyName = "ADVOKATSKEPPET";

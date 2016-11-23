@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import pl.pdebala.eniro.service.CompanyBasicSearch;
 import pl.pdebala.eniro.service.CompanyBasicSearchService;
 import pl.pdebala.eniro.web.model.SearchCriteria;
 
@@ -18,7 +19,7 @@ import javax.validation.Valid;
 public class SearchController {
 
     @Autowired
-    private CompanyBasicSearchService companyBasicSearchService;
+    private CompanyBasicSearch companyBasicSearchService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String searchForm(Model model) {
@@ -29,9 +30,12 @@ public class SearchController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String search(Model model, @Valid SearchCriteria criteria, BindingResult result) {
         if (!result.hasErrors()) {
-            model.addAttribute("results", companyBasicSearchService.search(criteria.getCommaSeparatedKeys(), criteria.getFilter()));
+            System.out.println("SearchController - before search: ");
+            model.addAttribute("deferredResults", companyBasicSearchService.search(criteria.getCommaSeparatedKeys(), criteria.getFilter()));
+            System.out.println("SearchController - after search: ");
             model.addAttribute("history", companyBasicSearchService.getHistory());
         }
+        System.out.println("SearchController - return: ");
         return "search";
     }
 

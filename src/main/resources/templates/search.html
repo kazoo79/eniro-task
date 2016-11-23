@@ -88,7 +88,7 @@
 
 </div>
 
-<div th:if="${results}">
+<div th:if="${deferredResults}">
 
     <h2>Search results:</h2>
 
@@ -100,8 +100,8 @@
         </thead>
 
         <tbody>
-        <tr th:each="result : ${results}">
-            <td th:text="${result}">Owner</td>
+        <tr th:each="result : ${deferredResults}">
+            <td th:text="${result.result}">Owner</td>
         </tr>
         </tbody>
     </table>

@@ -4,18 +4,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.client.AsyncRestTemplate;
+import org.springframework.web.context.request.async.DeferredResult;
 import pl.pdebala.eniro.rpository.SearchHistoryRepository;
 import pl.pdebala.eniro.rpository.entity.SearchHistory;
 import pl.pdebala.eniro.service.model.Company;
 import pl.pdebala.eniro.util.JsonConverter;
 
+import javax.annotation.PostConstruct;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 /**
  * Created by pdebala on 2016-10-08.
@@ -38,29 +48,33 @@ public class CompanyBasicSearchService implements CompanyBasicSearch {
     private JsonConverter jsonFilter;
 
     @Override
-    public Set<Company> search(final String commaSeparatedKeys, final String filter) {
+    public Set<DeferredResult<Set<Company>>> search(final String commaSeparatedKeys, final String filter) {
 
-        String[] keyWords = commaSeparatedKeys.split(",");
+        final String[] keyWords = commaSeparatedKeys.split(",");
 
-        Set<Company> result = new HashSet<>();
+        final Set<DeferredResult<Set<Company>>> deferredResultSet = new HashSet<DeferredResult<Set<Company>>>();
 
         Arrays.stream(keyWords)
                 .map(key -> asyncRestTemplate.getForEntity((ENIRO_SERVICE_URL + key), String.class))
-                .forEach(future -> {
-                    try {
-                        String responseBody = future.get().getBody();
-                        result.addAll(jsonFilter.convert(responseBody, "adverts", Company.class, filter));
-                    } catch (InterruptedException e) {
-                        logger.error("Exception while trying to obtain response data." + e);
+                .forEach(new Consumer<ListenableFuture<ResponseEntity<String>>>() {
+                    @Override
+                    public void accept(ListenableFuture<ResponseEntity<String>> future) {
+                        System.out.println(" Future: " + future);
+                        try {
+                            ResponseEntity<String> response = future.get();
+                            System.out.println("--- Response obtained ---");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        }
 
-                    } catch (ExecutionException e) {
-                        logger.error("Exception while trying to obtain response data." + e);
                     }
                 });
 
         searchHistoryRepository.save(new SearchHistory(commaSeparatedKeys, filter));
 
-        return result;
+        return deferredResultSet;
     }
 
     @Override
@@ -68,5 +82,21 @@ public class CompanyBasicSearchService implements CompanyBasicSearch {
         return (List<SearchHistory>) searchHistoryRepository.findAll();
     }
 
+
+    @PostConstruct
+    public void initProxy(){
+        int portNr = -1;
+        try {
+            portNr = Integer.parseInt("8080");
+        } catch (NumberFormatException e) {
+            logger.error("Unable to parse the proxy port number");
+        }
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        InetSocketAddress address = new InetSocketAddress("10.56.3.1",portNr);
+        Proxy proxy = new Proxy(Proxy.Type.HTTP,address);
+        factory.setProxy(proxy);
+
+        ((SimpleClientHttpRequestFactory)asyncRestTemplate.getAsyncRequestFactory()).setProxy(proxy);
+    }
 
 }

@@ -1,5 +1,7 @@
 package pl.pdebala.eniro.service;
 
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.web.context.request.async.DeferredResult;
 import pl.pdebala.eniro.rpository.entity.SearchHistory;
 import pl.pdebala.eniro.service.model.Company;
 
@@ -11,7 +13,7 @@ import java.util.Set;
  */
 public interface CompanyBasicSearch {
 
-    Set<Company> search(final String commaSeparatedKeys, final String filter);
+    Set<DeferredResult<Set<Company>>> search(final String commaSeparatedKeys, final String filter);
 
     List<SearchHistory> getHistory();
 }
